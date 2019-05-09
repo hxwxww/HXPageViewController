@@ -148,6 +148,16 @@ class HXPageContainer: UIViewController {
         reloadChildViewControllers()
     }
     
+    deinit {
+        /// 修复在iOS10以下的设备上仍然注册kvo的bug
+        /*
+         *** Terminating app due to uncaught exception 'NSInternalInconsistencyException', reason: 'An instance 0x7c33d400 of class HXNovelReader.HXPageContentView was deallocated while key value observers were still registered with it. Current observation info: <NSKeyValueObservationInfo 0x7b7e3f80> (
+         <NSKeyValueObservance 0x7b7e4100: Observer: 0x7b7e3f60, Key path: contentOffset, Options: <New: YES, Old: YES, Prior: NO> Context: 0x0, Property: 0x7b78a1c0>
+         )'
+         */
+        scrollView.observationInfo = nil
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         currentChildViewController?.beginAppearanceTransition(true, animated: true)
