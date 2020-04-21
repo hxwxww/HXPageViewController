@@ -11,7 +11,7 @@ import UIKit
 /// 自适应标记
 let HXPageViewAutomaticDimension: CGFloat = -1
 
-@objc enum HXPageTabBarItemTransitionAnimationType: Int {
+@objc public enum HXPageTabBarItemTransitionAnimationType: Int {
     /// 无动画
     case none
     /// 平滑的
@@ -19,7 +19,7 @@ let HXPageViewAutomaticDimension: CGFloat = -1
 }
 
 // MARK: -  行为代理
-@objc protocol HXPageTabBarDelegate: class {
+@objc public protocol HXPageTabBarDelegate: class {
     
     /// 选中index的回调
     ///
@@ -40,7 +40,7 @@ let HXPageViewAutomaticDimension: CGFloat = -1
 }
 
 // MARK: -  数据源代理
-@objc protocol HXPageTabBarDataSource: class {
+@objc public protocol HXPageTabBarDataSource: class {
 
     /// 选项数目
     ///
@@ -147,12 +147,12 @@ let HXPageViewAutomaticDimension: CGFloat = -1
 }
 
 // MARK: -  HXPageTabBar选项卡
-class HXPageTabBar: UIView {
+open class HXPageTabBar: UIView {
     
     // MARK: -  Properties
     
     /// 关联的内容scrollView
-    weak var contentScrollView: UIScrollView? {
+    open weak var contentScrollView: UIScrollView? {
         didSet {
             if contentScrollView != oldValue {
                 setupContentScrollObserver()
@@ -161,10 +161,10 @@ class HXPageTabBar: UIView {
     }
     
     /// 回调代理
-    weak var delegate: HXPageTabBarDelegate?
+    open weak var delegate: HXPageTabBarDelegate?
     
     /// 数据源代理
-    weak var dataSource: HXPageTabBarDataSource? {
+    open weak var dataSource: HXPageTabBarDataSource? {
         didSet {
             if let defaultIndex = dataSource?.defaultSelectedIndex?(in: self) {
                 selectedIndex = min(max(0, defaultIndex), numberOfItems() - 1)
@@ -174,7 +174,7 @@ class HXPageTabBar: UIView {
     }
     
     /// 当前选中的下标，默认为0
-    private (set) var selectedIndex: Int = 0
+    open private (set) var selectedIndex: Int = 0
     
     /// 数据模型
     private var itemModels: [HXPageTabBarItemModel] = []
@@ -213,7 +213,7 @@ class HXPageTabBar: UIView {
         setup()
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setup()
     }
@@ -223,13 +223,13 @@ class HXPageTabBar: UIView {
         addSubview(collectionView)
     }
     
-    override func layoutSubviews() {
+    open override func layoutSubviews() {
         super.layoutSubviews()
         collectionView.frame = bounds
         refreshCurrentState()
     }
     
-    override func willMove(toSuperview newSuperview: UIView?) {
+    open override func willMove(toSuperview newSuperview: UIView?) {
         super.willMove(toSuperview: newSuperview)
         if newSuperview == nil {
             scrollObserver = nil
@@ -635,48 +635,46 @@ extension HXPageTabBar {
     /// - Parameters:
     ///   - index: 位置
     ///   - flag: 是否同时滚动内容视图
-    func setSelectedIndex(_ index: Int, shouldHandleContentScrollView flag: Bool) {
+    open func setSelectedIndex(_ index: Int, shouldHandleContentScrollView flag: Bool) {
         selectedItem(at: index, shouldHandleContentScrollView: flag)
     }
     
     /// 重新加载
-    func reloadData() {
+    open func reloadData() {
         refreshCurrentState()
     }
-    
 }
 
 // MARK: -  UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 extension HXPageTabBar: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return itemModels.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HXPageTabBarItem.reuseID, for: indexPath) as! HXPageTabBarItem
         cell.configItem(itemModel: itemModels[indexPath.item])
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         selectedItem(at: indexPath.item, shouldHandleContentScrollView: true)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: itemModels[indexPath.item].itemWidth, height: bounds.height)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return itemSpacing
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return itemSpacing
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 0, left: itemSpacing, bottom: 0, right: itemSpacing)
     }
-    
 }

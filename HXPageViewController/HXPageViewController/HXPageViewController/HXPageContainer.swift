@@ -9,7 +9,7 @@
 import UIKit
 
 // MARK: -  行为代理
-@objc protocol HXPageContainerDelegate: class {
+@objc public protocol HXPageContainerDelegate: class {
     
     /// 将要切换子控制器
     ///
@@ -54,7 +54,7 @@ import UIKit
 }
 
 // MARK: -  数据源代理
-@objc protocol HXPageContainerDataSource: class {
+@objc public protocol HXPageContainerDataSource: class {
     
     /// 获取childViewController的数目
     ///
@@ -79,7 +79,7 @@ import UIKit
 }
 
 // MARK: -  重新加载子控制器的方式
-enum HXpageContainerReloadType {
+public enum HXpageContainerReloadType {
     /// 所有
     case all
     /// 除了当前
@@ -89,12 +89,12 @@ enum HXpageContainerReloadType {
 }
 
 // MARK: -  HXPageContainer内容控制器
-class HXPageContainer: UIViewController {
+open class HXPageContainer: UIViewController {
 
     // MARK: - Properties
     
     /// 数据源代理
-    weak var dataSource: HXPageContainerDataSource? {
+    open weak var dataSource: HXPageContainerDataSource? {
         didSet {
             if let defaultIndex = dataSource?.defaultCurrentIndex?(in: self) {
                 currentIndex = min(max(0, defaultIndex), numberOfChildViewControllers() - 1)
@@ -103,13 +103,13 @@ class HXPageContainer: UIViewController {
     }
     
     /// 代理
-    weak var delegate: HXPageContainerDelegate?
+    open weak var delegate: HXPageContainerDelegate?
     
     /// 当前的index
-    private (set) var currentIndex: Int = 0
+    open private (set) var currentIndex: Int = 0
     
     /// 当前子控制器
-    var currentChildViewController: UIViewController? {
+    open var currentChildViewController: UIViewController? {
         return childViewController(at: currentIndex)
     }
     
@@ -136,61 +136,50 @@ class HXPageContainer: UIViewController {
     private var potentialIndex: Int = -999
     
     /// 设置false，手动控制子控制器的生命周期
-    override var shouldAutomaticallyForwardAppearanceMethods: Bool {
+    open override var shouldAutomaticallyForwardAppearanceMethods: Bool {
         return false
     }
     
     // MARK: -  Life Cycle
     
-    override func viewDidLoad() {
+    open override func viewDidLoad() {
         super.viewDidLoad()
         setup()
         reloadChildViewControllers()
     }
     
-    deinit {
-        /// 修复在iOS10以下的设备上仍然注册kvo的bug
-        /*
-         *** Terminating app due to uncaught exception 'NSInternalInconsistencyException', reason: 'An instance 0x7c33d400 of class HXNovelReader.HXPageContentView was deallocated while key value observers were still registered with it. Current observation info: <NSKeyValueObservationInfo 0x7b7e3f80> (
-         <NSKeyValueObservance 0x7b7e4100: Observer: 0x7b7e3f60, Key path: contentOffset, Options: <New: YES, Old: YES, Prior: NO> Context: 0x0, Property: 0x7b78a1c0>
-         )'
-         */
-//        scrollView.observationInfo = nil
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
+    open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         currentChildViewController?.beginAppearanceTransition(true, animated: true)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
+    open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         currentChildViewController?.endAppearanceTransition()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
+    open override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         currentChildViewController?.beginAppearanceTransition(false, animated: true)
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
+    open override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         currentChildViewController?.endAppearanceTransition()
     }
 
-    override func viewDidLayoutSubviews() {
+    open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         /// 重新布局
         relayoutScrollView()
     }
     
     /// 收到内存警告
-    override func didReceiveMemoryWarning() {
+    open override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         /// 除了当前子控制器，清空所有 
         clearCaches(.exceptCurrentIndex)
     }
-    
 }
 
 // MARK: -  Private Methods
@@ -416,13 +405,13 @@ extension HXPageContainer {
 extension HXPageContainer {
     
     /// 重新加载数据
-    func reloadData(_ reloadType: HXpageContainerReloadType = .all) {
+    open func reloadData(_ reloadType: HXpageContainerReloadType = .all) {
         clearCaches(reloadType)
         reloadChildViewControllers(shouldForwardAppearance: true)
     }
     
     /// 重新设置当前页
-    func setCurrentIndex(_ index: Int, animated: Bool) {
+    open func setCurrentIndex(_ index: Int, animated: Bool) {
         /// 如果还没加载成功，说明是设置默认index
         if !isViewLoaded {
             currentIndex = index
@@ -442,13 +431,12 @@ extension HXPageContainer {
             customScrollAnimation(fromIndex: currentIndex, toIndex: potentialIndex)
         }
     }
-    
 }
 
 // MARK: -  UIScrollViewDelegate
 extension HXPageContainer: UIScrollViewDelegate {
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         /// 如果不是拖动的，不做处理
         if !scrollView.isTracking && !scrollView.isDecelerating {
             return
@@ -480,20 +468,19 @@ extension HXPageContainer: UIScrollViewDelegate {
         }
     }
     
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if !decelerate && hasProcessAppearance {
             endUpdateChildViewControllers()
         }
     }
     
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         if hasProcessAppearance {
             endUpdateChildViewControllers()
         }
     }
     
-    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+    public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         endUpdateChildViewControllers()
     }
-    
 }

@@ -9,7 +9,7 @@
 import UIKit
 
 // MARK: -  行为代理
-@objc protocol HXPageViewControllerDelegate: class {
+@objc public protocol HXPageViewControllerDelegate: class {
     
     /// 将要切换子控制器
     ///
@@ -54,7 +54,7 @@ import UIKit
 }
 
 // MARK: -  数据源代理
-@objc protocol HXPageViewControllerDataSource: class {
+@objc public protocol HXPageViewControllerDataSource: class {
     
     /// 选项数目
     ///
@@ -181,18 +181,18 @@ import UIKit
 }
 
 // MARK: -  封装了pageContainer和pageTabBar的控制器
-class HXPageViewController: UIViewController {
+open class HXPageViewController: UIViewController {
 
     // MARK: -  Properties
     
     ///数据源代理
-    weak var dataSource: HXPageViewControllerDataSource?
+    open weak var dataSource: HXPageViewControllerDataSource?
     
     /// 行为代理
-    weak var delegate: HXPageViewControllerDelegate?
+    open weak var delegate: HXPageViewControllerDelegate?
     
     /// 当前选中的下标
-    var selectedIndex: Int {
+    open var selectedIndex: Int {
         return pageTabBar.selectedIndex
     }
     
@@ -213,12 +213,12 @@ class HXPageViewController: UIViewController {
     
     // MARK: -  Life Cycle
     
-    override func viewDidLoad() {
+    open override func viewDidLoad() {
         super.viewDidLoad()
         setup()
     }
     
-    override func viewDidLayoutSubviews() {
+    open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         pageTabBar.frame = preferredTabbarFrame()
         pageContainer.view.frame = preferredContainerFrame()
@@ -236,96 +236,95 @@ class HXPageViewController: UIViewController {
     
     // MARK: -  Public Methods，各种配置，子类可以覆写这些方法
 
-    func preferredNumberOfItems() -> Int {
+    open func preferredNumberOfItems() -> Int {
         return dataSource?.numberOfItems(in: self) ?? 0
     }
     
-    func preferredTitleForItem(at index: Int) -> String {
+    open func preferredTitleForItem(at index: Int) -> String {
         return dataSource?.pageViewController(self, titleForItemAt: index) ?? ""
     }
     
-    func preferredChildViewContoller(at index: Int) -> UIViewController {
+    open func preferredChildViewContoller(at index: Int) -> UIViewController {
         return dataSource?.pageViewController(self, childViewContollerAt: index) ?? UIViewController()
     }
     
-    func preferredTabbarFrame() -> CGRect {
+    open func preferredTabbarFrame() -> CGRect {
         return dataSource?.tabbarFrame?(in: self) ?? CGRect(x: 0, y: 0, width: view.bounds.width, height: 50)
     }
     
-    func preferredContainerFrame() -> CGRect {
+    open func preferredContainerFrame() -> CGRect {
         return dataSource?.containerFrame?(in: self) ?? CGRect(x: 0, y: 50, width: view.bounds.width, height: view.bounds.height - 50)
     }
     
-    func preferredDefaultSelectedIndex() -> Int {
+    open func preferredDefaultSelectedIndex() -> Int {
         return dataSource?.defaultSelectedIndex?(in: self) ?? 0
     }
     
-    func preferredWidthForItem(at index: Int) -> CGFloat {
+    open func preferredWidthForItem(at index: Int) -> CGFloat {
         return dataSource?.pageViewController?(self, widthForItemAt: index) ?? HXPageViewAutomaticDimension
     }
     
-    func preferredTitleFontForItem() -> UIFont {
+    open func preferredTitleFontForItem() -> UIFont {
         return dataSource?.titleFontForItem?(in: self) ?? UIFont.systemFont(ofSize: 15)
     }
     
-    func preferredTitleHighlightedFontForItem() -> UIFont {
+    open func preferredTitleHighlightedFontForItem() -> UIFont {
         return dataSource?.titleHighlightedFontForItem?(in: self) ?? UIFont.systemFont(ofSize: 15)
     }
     
-    func preferredTitleColorForItem() -> UIColor {
+    open func preferredTitleColorForItem() -> UIColor {
         return dataSource?.titleColorForItem?(in: self) ?? .lightGray
     }
     
-    func preferredTitleHighlightedColorForItem() -> UIColor {
+    open func preferredTitleHighlightedColorForItem() -> UIColor {
         return dataSource?.titleHighlightedColorForItem?(in: self) ?? .black
     }
     
-    func preferredSpacingForItem() -> CGFloat {
+    open func preferredSpacingForItem() -> CGFloat {
         return dataSource?.spacingForItem?(in: self) ?? 10
     }
     
-    func preferredRelayoutWhenWidthNotEnough() -> Bool {
+    open func preferredRelayoutWhenWidthNotEnough() -> Bool {
         return dataSource?.relayoutWhenWidthNotEnough?(in: self) ?? true
     }
     
-    func preferredNeedsIndicatorView() -> Bool {
+    open func preferredNeedsIndicatorView() -> Bool {
         return dataSource?.needsIndicatorView?(in: self) ?? true
     }
     
-    func preferredColorForIndicatorView() -> UIColor {
+    open func preferredColorForIndicatorView() -> UIColor {
         return dataSource?.colorForIndicatorView?(in: self) ?? preferredTitleHighlightedColorForItem()
     }
     
-    func preferredHeightForIndicatorView() -> CGFloat {
+    open func preferredHeightForIndicatorView() -> CGFloat {
         return dataSource?.heightForIndicatorView?(in: self) ?? 3
     }
    
-    func preferredBottomForIndicatorView() -> CGFloat {
+    open func preferredBottomForIndicatorView() -> CGFloat {
         return dataSource?.bottomForIndicatorView?(in: self) ?? 5
     }
     
-    func preferredWidthForIndicatorView(at index: Int) -> CGFloat {
+    open func preferredWidthForIndicatorView(at index: Int) -> CGFloat {
         return dataSource?.pageViewController?(self, widthForIndicatorViewAt: index) ?? HXPageViewAutomaticDimension
     }
     
-    func preferredTransitionAnimationType() -> HXPageTabBarItemTransitionAnimationType {
+    open func preferredTransitionAnimationType() -> HXPageTabBarItemTransitionAnimationType {
         return dataSource?.transitionAnimationType?(in: self) ?? .none
     }
-    
 }
 
 // MARK: -  HXPageContainerDataSource
 extension HXPageViewController: HXPageContainerDataSource {
     
-    func numberOfChildViewControllers(in pageContainer: HXPageContainer) -> Int {
+    public func numberOfChildViewControllers(in pageContainer: HXPageContainer) -> Int {
         return preferredNumberOfItems()
     }
     
-    func pageContainer(_ pageContainer: HXPageContainer, childViewContollerAt index: Int) -> UIViewController {
+    public func pageContainer(_ pageContainer: HXPageContainer, childViewContollerAt index: Int) -> UIViewController {
         return preferredChildViewContoller(at: index)
     }
     
-    func defaultCurrentIndex(in pageContainer: HXPageContainer) -> Int {
+    public func defaultCurrentIndex(in pageContainer: HXPageContainer) -> Int {
         return preferredDefaultSelectedIndex()
     }
     
@@ -334,23 +333,23 @@ extension HXPageViewController: HXPageContainerDataSource {
 // MARK: -  HXPageContainerDelegate
 extension HXPageViewController: HXPageContainerDelegate {
     
-    func pageContainer(_ pageContainer: HXPageContainer, willTransition fromVC: UIViewController, toVC: UIViewController) {
+    public func pageContainer(_ pageContainer: HXPageContainer, willTransition fromVC: UIViewController, toVC: UIViewController) {
         delegate?.pageViewController?(self, willTransition: fromVC, toVC: toVC)
     }
     
-    func pageContainer(_ pageContainer: HXPageContainer, didFinishedTransition fromVC: UIViewController, toVC: UIViewController) {
+    public func pageContainer(_ pageContainer: HXPageContainer, didFinishedTransition fromVC: UIViewController, toVC: UIViewController) {
         delegate?.pageViewController?(self, didFinishedTransition: fromVC, toVC: toVC)
     }
     
-    func pageContainer(_ pageContainer: HXPageContainer, didCancelledTransition fromVC: UIViewController, toVC: UIViewController) {
+    public func pageContainer(_ pageContainer: HXPageContainer, didCancelledTransition fromVC: UIViewController, toVC: UIViewController) {
         delegate?.pageViewController?(self, didCancelledTransition: fromVC, toVC: toVC)
     }
     
-    func pageContainer(_ pageContainer: HXPageContainer, dragging fromIndex: Int, toIndex: Int, percent: CGFloat) {
+    public func pageContainer(_ pageContainer: HXPageContainer, dragging fromIndex: Int, toIndex: Int, percent: CGFloat) {
         delegate?.pageViewController?(self, dragging: fromIndex, toIndex: toIndex, percent: percent)
     }
     
-    func pageContainer(_ pageContainer: HXPageContainer, didSelected index: Int) {
+    public func pageContainer(_ pageContainer: HXPageContainer, didSelected index: Int) {
         delegate?.pageViewController?(self, didSelected: index)
     }
     
@@ -359,69 +358,68 @@ extension HXPageViewController: HXPageContainerDelegate {
 // MARK: -  HXPageTabBarDelegate
 extension HXPageViewController: HXPageTabBarDataSource {
     
-    func numberOfItems(in pageTabBar: HXPageTabBar) -> Int {
+    public func numberOfItems(in pageTabBar: HXPageTabBar) -> Int {
         return preferredNumberOfItems()
     }
     
-    func pageTabBar(_ pageTabBar: HXPageTabBar, titleForItemAt index: Int) -> String {
+    public func pageTabBar(_ pageTabBar: HXPageTabBar, titleForItemAt index: Int) -> String {
         return preferredTitleForItem(at: index)
     }
     
-    func defaultSelectedIndex(in pageTabBar: HXPageTabBar) -> Int {
+    public func defaultSelectedIndex(in pageTabBar: HXPageTabBar) -> Int {
         return preferredDefaultSelectedIndex()
     }
     
-    func pageTabBar(_ pageTabBar: HXPageTabBar, widthForIndicatorViewAt index: Int) -> CGFloat {
+    public func pageTabBar(_ pageTabBar: HXPageTabBar, widthForIndicatorViewAt index: Int) -> CGFloat {
         return preferredWidthForIndicatorView(at: index)
     }
     
-    func pageTabBar(_ pageTabBar: HXPageTabBar, widthForItemAt index: Int) -> CGFloat {
+    public func pageTabBar(_ pageTabBar: HXPageTabBar, widthForItemAt index: Int) -> CGFloat {
         return preferredWidthForItem(at: index)
     }
     
-    func colorForIndicatorView(in pageTabBar: HXPageTabBar) -> UIColor {
+    public func colorForIndicatorView(in pageTabBar: HXPageTabBar) -> UIColor {
         return preferredColorForIndicatorView()
     }
     
-    func spacingForItem(in pageTabBar: HXPageTabBar) -> CGFloat {
+    public func spacingForItem(in pageTabBar: HXPageTabBar) -> CGFloat {
         return preferredSpacingForItem()
     }
     
-    func needsIndicatorView(in pageTabBar: HXPageTabBar) -> Bool {
+    public func needsIndicatorView(in pageTabBar: HXPageTabBar) -> Bool {
         return preferredNeedsIndicatorView()
     }
     
-    func titleFontForItem(in pageTabBar: HXPageTabBar) -> UIFont {
+    public func titleFontForItem(in pageTabBar: HXPageTabBar) -> UIFont {
         return preferredTitleFontForItem()
     }
     
-    func titleColorForItem(in pageTabBar: HXPageTabBar) -> UIColor {
+    public func titleColorForItem(in pageTabBar: HXPageTabBar) -> UIColor {
         return preferredTitleColorForItem()
     }
     
-    func bottomForIndicatorView(in pageTabBar: HXPageTabBar) -> CGFloat {
+    public func bottomForIndicatorView(in pageTabBar: HXPageTabBar) -> CGFloat {
         return preferredBottomForIndicatorView()
     }
     
-    func heightForIndicatorView(in pageTabBar: HXPageTabBar) -> CGFloat {
+    public func heightForIndicatorView(in pageTabBar: HXPageTabBar) -> CGFloat {
         return preferredHeightForIndicatorView()
     }
     
-    func relayoutWhenWidthNotEnough(in pageTabBar: HXPageTabBar) -> Bool {
+    public func relayoutWhenWidthNotEnough(in pageTabBar: HXPageTabBar) -> Bool {
         return preferredRelayoutWhenWidthNotEnough()
     }
     
-    func titleHighlightedFontForItem(in pageTabBar: HXPageTabBar) -> UIFont {
+    public func titleHighlightedFontForItem(in pageTabBar: HXPageTabBar) -> UIFont {
         return preferredTitleHighlightedFontForItem()
     }
     
-    func titleHighlightedColorForItem(in pageTabBar: HXPageTabBar) -> UIColor {
+    public func titleHighlightedColorForItem(in pageTabBar: HXPageTabBar) -> UIColor {
         return preferredTitleHighlightedColorForItem()
     }
     
-    func transitionAnimationType(in pageTabBar: HXPageTabBar) -> HXPageTabBarItemTransitionAnimationType {
+    public func transitionAnimationType(in pageTabBar: HXPageTabBar) -> HXPageTabBarItemTransitionAnimationType {
         return preferredTransitionAnimationType()
     }
-    
 }
 

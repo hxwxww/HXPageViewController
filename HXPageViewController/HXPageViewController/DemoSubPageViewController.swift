@@ -59,28 +59,3 @@ class DemoSubPageViewController: HXPageViewController {
     }
     
 }
-
-// MARK: -  HXPageViewControllerDelegate
-extension HXPageViewController: HXPageViewControllerDelegate {
- 
-    func pageViewController(_ pageViewController: HXPageViewController, willTransition fromVC: UIViewController, toVC: UIViewController) {
-//        print("willTransition: \(pageViewController.selectedIndex) fromVC: \(fromVC) toVC: \(toVC)")
-    }
-    
-    func pageViewController(_ pageViewController: HXPageViewController, didFinishedTransition fromVC: UIViewController, toVC: UIViewController) {
-//        print("didFinishedTransition: \(pageViewController.selectedIndex) fromVC: \(fromVC) toVC: \(toVC)")
-    }
-    
-    func pageViewController(_ pageViewController: HXPageViewController, didCancelledTransition fromVC: UIViewController, toVC: UIViewController) {
-//        print("didCancelledTransition: \(pageViewController.selectedIndex) fromVC: \(fromVC) toVC: \(toVC)")
-    }
-    
-    func pageViewController(_ pageViewController: HXPageViewController, dragging fromIndex: Int, toIndex: Int, percent: CGFloat) {
-//        print("dragging: \(pageViewController.selectedIndex) fromIndex: \(fromIndex) toIndex: \(toIndex) percent: \(percent)")
-    }
-    
-    func pageViewController(_ pageViewController: HXPageViewController, didSelected index: Int) {
-//        print("didSelected: \(pageViewController.selectedIndex) index: \(index)")
-    }
-    
-}
