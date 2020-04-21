@@ -88,11 +88,11 @@ extension DemoTabBarViewController: HXPageTabBarDataSource, HXPageTabBarDelegate
     }
     
     func titleFontForItem(in pageTabBar: HXPageTabBar) -> UIFont {
-        return UIFont.systemFont(ofSize: 15)
+        return UIFont.systemFont(ofSize: 15, weight: .thin)
     }
     
     func titleHighlightedFontForItem(in pageTabBar: HXPageTabBar) -> UIFont {
-        return UIFont.boldSystemFont(ofSize: 20)
+        return UIFont.systemFont(ofSize: 20, weight: .bold)
     }
     
     func titleColorForItem(in pageTabBar: HXPageTabBar) -> UIColor {
@@ -111,8 +111,8 @@ extension DemoTabBarViewController: HXPageTabBarDataSource, HXPageTabBarDelegate
         return .smoothness
     }
     
-    func relayoutWhenWidthNotEnough(in pageTabBar: HXPageTabBar) -> Bool {
-        return false
-    }
+//    func relayoutWhenWidthNotEnough(in pageTabBar: HXPageTabBar) -> Bool {
+//        return false
+//    }
     
 }

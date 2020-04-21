@@ -208,7 +208,7 @@ open class HXPageTabBar: UIView {
     
     // MARK: -  init
     
-    override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
     }
@@ -388,7 +388,6 @@ extension HXPageTabBar {
     /// 刷新当前状态
     private func refreshCurrentState() {
         let itemCount = numberOfItems()
-        itemSpacing = 20
         /// 如果设置了间距
         if let spacing = dataSource?.spacingForItem?(in: self) {
             itemSpacing = spacing
@@ -507,6 +506,8 @@ extension HXPageTabBar {
             let toModel = itemModel(at: toIndex, percent: 1 - percent)
             fromItem.configItem(itemModel: fromModel)
             toItem.configItem(itemModel: toModel)
+            itemModels.replaceSubrange(fromIndex ..< fromIndex + 1, with: [fromModel])
+            itemModels.replaceSubrange(toIndex ..< toIndex + 1, with: [toModel])
             collectionView.collectionViewLayout.invalidateLayout()
         }
         /// 处理指示器的位置
@@ -596,10 +597,8 @@ extension HXPageTabBar {
         /// 更新选中状态
         let lastIndex = selectedIndex
         selectedIndex = index
-        var lastModel = itemModels[lastIndex]
-        var selectedModel = itemModels[selectedIndex]
-        lastModel.isSelected = false
-        selectedModel.isSelected = true
+        let lastModel = itemModel(at: lastIndex)
+        let selectedModel = itemModel(at: selectedIndex)
         itemModels.replaceSubrange(lastIndex ..< lastIndex + 1, with: [lastModel])
         itemModels.replaceSubrange(selectedIndex ..< selectedIndex + 1, with: [selectedModel])
         collectionView.reloadData()

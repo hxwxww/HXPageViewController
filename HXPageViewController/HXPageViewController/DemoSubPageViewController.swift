@@ -15,7 +15,6 @@ class DemoSubPageViewController: HXPageViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         automaticallyAdjustsScrollViewInsets = false
-        delegate = self
     }
     
     deinit {

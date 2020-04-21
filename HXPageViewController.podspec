@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name            = 'HXPageViewController'
-  s.version         = '0.0.2'
+  s.version         = '0.0.3'
   s.summary         = 'A pageViewController which manage childViewController appearance transition'
 
   s.homepage        = 'https://github.com/hxwxww/HXPageViewController'

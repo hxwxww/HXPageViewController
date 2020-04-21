@@ -114,7 +114,7 @@ open class HXPageContainer: UIViewController {
     }
     
     /// 滚动视图
-    lazy var scrollView: HXPageContentView = {
+    open lazy var scrollView: HXPageContentView = {
         let scrollView = HXPageContentView(frame: view.bounds)
         scrollView.delegate = self
         return scrollView

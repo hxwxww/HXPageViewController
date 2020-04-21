@@ -32,10 +32,13 @@ struct HXPageTabBarUtil {
     /// - Returns: interpolationFont
     static func interpolationFont(fromFont: UIFont, toFont: UIFont, percent: CGFloat) -> UIFont {
         let fromFontSize = fromFont.pointSize
-        let fromFontDescriptor = fromFont.fontDescriptor
         let toFontSize = toFont.pointSize
         let interpolationFontSize = interpolationValue(fromValue: fromFontSize, toValue: toFontSize, percent: percent)
-        return UIFont(descriptor: fromFontDescriptor, size: interpolationFontSize)
+        if percent <= 0.5 {
+            return fromFont.withSize(interpolationFontSize)
+        } else {
+            return toFont.withSize(interpolationFontSize)
+        }
     }
     
     /// 计算颜色

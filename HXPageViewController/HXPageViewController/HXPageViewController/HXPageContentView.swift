@@ -11,7 +11,7 @@ import UIKit
 /// 设置contentOffset之后的回调
 typealias HXPageContentViewDidSetContentOffsetCallback = (_ index: Int, _ animated: Bool) -> ()
 
-class HXPageContentView: UIScrollView {
+open class HXPageContentView: UIScrollView {
 
     // MARK: -  Properties
     
@@ -20,12 +20,12 @@ class HXPageContentView: UIScrollView {
     
     // MARK: -  init
     
-    override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setup()
     }
@@ -44,7 +44,7 @@ class HXPageContentView: UIScrollView {
 
     // MARK: -  override
     
-    override func setContentOffset(_ contentOffset: CGPoint, animated: Bool) {
+    open override func setContentOffset(_ contentOffset: CGPoint, animated: Bool) {
         if let didSetContentOffsetCallback = didSetContentOffsetCallback {
             /// 手动设置contentOffset的动画
             let index = calculateIndex(of: contentOffset.x)
