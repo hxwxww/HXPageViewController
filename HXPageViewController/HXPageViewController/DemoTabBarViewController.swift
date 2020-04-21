@@ -49,10 +49,14 @@ class DemoTabBarViewController: UIViewController {
         }
     }
     
-    /// 单独使用HXPageTabBar时，需要手动设置scrollView.observationInfo = nil，否则会在低版本下崩溃
     deinit {
-        scrollView.observationInfo = nil
+        print("DemoTabBarViewController deinit")
     }
+    
+    /// 单独使用HXPageTabBar时，需要手动设置scrollView.observationInfo = nil，否则会在低版本下崩溃
+//    deinit {
+//        scrollView.observationInfo = nil
+//    }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()

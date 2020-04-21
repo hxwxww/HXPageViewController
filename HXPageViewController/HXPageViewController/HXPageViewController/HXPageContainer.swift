@@ -155,7 +155,7 @@ class HXPageContainer: UIViewController {
          <NSKeyValueObservance 0x7b7e4100: Observer: 0x7b7e3f60, Key path: contentOffset, Options: <New: YES, Old: YES, Prior: NO> Context: 0x0, Property: 0x7b78a1c0>
          )'
          */
-        scrollView.observationInfo = nil
+//        scrollView.observationInfo = nil
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -477,6 +477,12 @@ extension HXPageContainer: UIScrollViewDelegate {
                 potentialIndex = currentIndex - 1
                 beginUpdateChildViewControllers()
             }
+        }
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate && hasProcessAppearance {
+            endUpdateChildViewControllers()
         }
     }
     

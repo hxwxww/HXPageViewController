@@ -28,6 +28,7 @@ class DemoMatchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        automaticallyAdjustsScrollViewInsets = false
         addChild(pageContainer)
         pageContainer.didMove(toParent: self)
         view.addSubview(pageContainer.view)
@@ -35,6 +36,10 @@ class DemoMatchViewController: UIViewController {
         view.addSubview(pageTabBar)
     }
 
+    deinit {
+        print("DemoMatchViewController deinit")
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         let navigationHeight = UIApplication.shared.statusBarFrame.height + 44

@@ -23,7 +23,7 @@ class DemoContainerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        automaticallyAdjustsScrollViewInsets = false
         segment.selectedSegmentIndex = 1
         pageContainer.setCurrentIndex(1, animated: false)
         addChild(pageContainer)
@@ -31,6 +31,10 @@ class DemoContainerViewController: UIViewController {
         view.addSubview(pageContainer.view)
     }
 
+    deinit {
+        print("DemoContainerViewController deinit")
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         let navigationHeight = UIApplication.shared.statusBarFrame.height + 44

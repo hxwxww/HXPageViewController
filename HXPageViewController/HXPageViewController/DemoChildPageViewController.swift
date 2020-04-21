@@ -21,11 +21,16 @@ class DemoChildPageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        automaticallyAdjustsScrollViewInsets = false
         addChild(pageVC)
         pageVC.didMove(toParent: pageVC)
         view.addSubview(pageVC.view)
     }
 
+    deinit {
+        print("DemoChildPageViewController deinit")
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         let originY = UIApplication.shared.statusBarFrame.height + 44

@@ -22,10 +22,15 @@ class DemoLoadMoreViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        automaticallyAdjustsScrollViewInsets = false
         title = "Index\(1)"
         addChild(pageContainer)
         pageContainer.didMove(toParent: self)
         view.addSubview(pageContainer.view)
+    }
+    
+    deinit {
+        print("DemoLoadMoreViewController deinit")
     }
     
     override func viewDidLayoutSubviews() {

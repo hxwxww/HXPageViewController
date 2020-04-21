@@ -229,6 +229,14 @@ class HXPageTabBar: UIView {
         refreshCurrentState()
     }
     
+    override func willMove(toSuperview newSuperview: UIView?) {
+        super.willMove(toSuperview: newSuperview)
+        if newSuperview == nil {
+            scrollObserver = nil
+        } else {
+            setupContentScrollObserver()
+        }
+    }
 }
 
 // MARK: -  UI
@@ -385,7 +393,7 @@ extension HXPageTabBar {
         if let spacing = dataSource?.spacingForItem?(in: self) {
             itemSpacing = spacing
         }
-        /// 计算当item总宽度小于HXCategoryView的宽度时，居中显示所有item，并重新计算itemSpacing，
+        /// 计算当item总宽度小于HXPageTabBar的宽度时，居中显示所有item，并重新计算itemSpacing，
         var totalItemWidth: CGFloat = 0
         var totalSpacingWidth: CGFloat = itemSpacing
         for i in 0 ..< itemCount {
