@@ -3,6 +3,10 @@
 
 ![image](https://github.com/hxwxww/HXPageViewController/raw/master/screenshots/screenshot.gif)
 
+## 导入
+```
+pod 'HXPageViewController'
+```
 ## 简单介绍
 
 - 子控制器生命周期轻松管理
